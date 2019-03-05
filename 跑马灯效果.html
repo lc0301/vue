@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/vue.min.js" ></script>
+	</head>
+	<body>
+		<div id="app">
+			<button v-on:click="lang">浪起来</button>
+			<button v-on:click="stop">停下来</button>
+			<p>{{text}}</p>
+		</div>
+	</body>
+	<script>
+		new Vue({
+			el:'#app',
+			data:{
+				text:'猥琐发育，别浪~',
+				interval:null
+			},
+			methods:{
+				lang:function(){
+					if (this.interval !=null) return     /*判断是否已经赋值，避免重复定时器*/
+					this.interval = setInterval( () => {      /*箭头函数，让外部的this指向内部的this*/
+						         /*定时器*/
+						var start=this.text.substring(0,1);  /*获取text字符的第一个字段*/
+						var end=this.text.substring(1);     /*获取text字符的第一个字段之外的字段*/
+						this.text=end+start;
+					           },400)
+					
+				},
+				stop:function(){
+					clearInterval(this.interval)    /*清除定时器，但是值并不为NULL，如果再次运行lang函数会与if判断矛盾 从而return出去*/
+					this.interval=null;
+				}
+			}
+		})
+	</script>
+</html>
