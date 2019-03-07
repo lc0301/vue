@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/vue.min.js" ></script>
+	</head>
+	<body>
+		<div id="app">
+			<input v-model="n1"/>
+			<select v-model="opt">
+				<option>+</option>
+				<option>-</option>
+				<option>*</option>
+				<option>/</option>
+			</select>
+			<input v-model="n2" />
+			<button v-on:click="cal">=</button>
+			<input v-model="result" />
+		</div>
+	</body>
+	<script>
+		var vm = new Vue({
+			el:'#app',
+			data:{
+				n1:null,
+				n2:null,
+				opt:'+',
+				result:null 
+			},
+			methods:{
+				cal(){
+					switch(this.opt){
+						case '+':
+						this.result=parseInt(this.n1)+parseInt(this.n2)
+						break;
+						case '-':
+						this.result=parseInt(this.n1)-parseInt(this.n2)
+						break;
+                        case '*':
+						this.result=parseInt(this.n1)*parseInt(this.n2)
+						break;
+                        case '/':
+						this.result=parseInt(this.n1)/parseInt(this.n2)
+						break;
+					}
+				}
+			}
+		});
+	</script>
+</html>
