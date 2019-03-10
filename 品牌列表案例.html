@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>品牌列表案例</title>
+    <script src="js/vue.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+</head>
+<body>
+    <div id="app">
+        id：<input value="" v-model="id">
+        名称：<input value="" v-model="title">
+        <input value="添加" type="button" v-on:click="add"> 
+        <!-- 添加按钮 点击触发add（）添加函数 -->
+        搜索关键字<input value="" v-model="msg">
+        <table class="table table-bordered table">
+            <thead>
+                <tr>
+                    <td>id</td>
+                    <td>名称</td>
+                    <td>创建时间</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in search(msg)" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.time | data}}</td>
+                    <!-- 过滤器 data为过滤器名称 -->
+                    <td><a href="" @click.prevent="del(item.id)">删除</a></td>
+                    <!-- 删除功能 prevent防止默认事件的触发 防止点击刷新页面 
+                        del（）函数 item.id获取删除的对象id 将其作为形参传给 del函数 -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    Vue.filter('data',function(){
+        var dt=new Date()
+        var y=dt.getFullYear()
+        var m=dt.getMonth()+1
+        var d=dt.getDate()
+        var h=dt.getHours()
+        var ms=dt.getMinutes()
+        var s=dt.getSeconds()
+        return y+'-'+ m +'-'+d + ' '+ h +':'+ms+':'+s
+    })
+    var vm = new Vue({
+        el:'#app',
+        data:{
+            id:'',
+            title:'',
+            msg:'',
+           list: [
+               { id:1,  title:'奔驰', time:new Date()},
+               { id:2,  title:'宝马', time:new Date()}
+               ]
+        },
+        methods:{
+            add(){
+                var newlist={id:this.id,title:this.title,time:new Date()};
+                // 将两个表单双向绑定的数据放入一个新得newlist对象里 再将新的对象push加入list数组里
+                this.list.push(newlist);
+                this.id='';
+                this.title='';
+            },
+            del(id){ 
+                // 将删除对象id传过来
+                var index=this.list.findIndex(item =>{
+                    // 回调item对象 找到索引值
+                    if(item.id==id)
+                    // 如果传过来的id值等于item对象的id 返回其索引值
+                    return true
+                })
+                console.log(index)
+                this.list.splice(index,1)
+                // 删除函数 索引值从0开始，该函数表示从该索引值的下一个开始删除
+            },
+            search(msg){
+                var newlist=[];
+                this.list.forEach( item => {
+                    // 遍历数组对象 如果该对象的title属性包括msg字符串，则将该对象push到新的list数组
+                    if( item.title.indexOf(msg) !=-1){
+                        newlist.push(item)
+                    }   
+                });
+                return newlist
+                // 新的数组newlist返回
+            }
+        }
+    })
+</script>
+</html>
